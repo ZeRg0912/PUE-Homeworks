@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -10,10 +10,11 @@ UCLASS()
 class CPPBASE_API ACppBaseActor : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
 	ACppBaseActor();
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -21,8 +22,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere)
-	FString PlayerName = "DefaultName";
+	UPROPERTY(VisibleAnywhere)
+	FString PlayerName = this->GetClass()->GetName();
 
 	UPROPERTY(EditInstanceOnly)
 	int EnemyNum = 20;
