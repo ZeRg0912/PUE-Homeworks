@@ -41,13 +41,22 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* Mesh;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* Mesh;
+	UFUNCTION(BlueprintCallable)
+	void SinMovement();
+
+	UFUNCTION(BlueprintCallable)
+	FVector GetInitialLocation();
+
+	UFUNCTION(BlueprintCallable)
+	void SetInitialLocation(FVector location);
 
 	UPROPERTY(VisibleAnywhere)
 	FString PlayerName = this->GetClass()->GetName();
@@ -60,4 +69,13 @@ protected:
 	
 	UFUNCTION(BlueprintCallable)
 	void ShowActorInformation();
+
+	UPROPERTY(EditInstanceOnly)
+	float Amplitude = 35.0;
+
+	UPROPERTY(EditInstanceOnly)
+	float Frequency = 2.0;
+	
+	UPROPERTY(VisibleAnywhere)
+	FVector InitialLocation;
 };

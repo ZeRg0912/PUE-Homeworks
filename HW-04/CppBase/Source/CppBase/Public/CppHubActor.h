@@ -30,9 +30,6 @@ protected:
 	FTimerHandle SpawnTimerHandle;
 	FTimerHandle DestroyTimerHandle;
 
-	void OnTimeToSpawn();
-	void OnTimeToDestroy();
-
 	const int32 TotalCount = 10;
 	int32 CurrentTimerCount = 0;
 
@@ -45,5 +42,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	void OnTimeToSpawn();
+	void OnTimeToDestroy();
 
 };
