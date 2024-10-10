@@ -1,11 +1,13 @@
-//  LeaveMeAlone Game by Netologiya. All RightsReserved
+// LeaveMeAlone Game by Netologiya. All Rights Reserved.
 
 
 #include "Player/LMAPlayerController.h"
 
-ALMAPlayerController::ALMAPlayerController() {}
+ALMAPlayerController::ALMAPlayerController()
+{
+}
 
-void ALMAPlayerController::BeginPlay() 
+void ALMAPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
