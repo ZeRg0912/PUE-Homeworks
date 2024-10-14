@@ -18,6 +18,12 @@ ALMAHealthPickup::ALMAHealthPickup()
 void ALMAHealthPickup::BeginPlay()
 {
 	Super::BeginPlay();
+	InitialLocation = this->GetActorLocation();
+}
+
+void ALMAHealthPickup::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 }
 
 void ALMAHealthPickup::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -28,11 +34,6 @@ void ALMAHealthPickup::NotifyActorBeginOverlap(AActor* OtherActor)
 	{
 		PickupWasTaken();
 	}
-}
-
-void ALMAHealthPickup::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 
 bool ALMAHealthPickup::GivePickup(ALMADefaultCharacter* Character)
@@ -57,4 +58,20 @@ void ALMAHealthPickup::RespawnPickup()
 {
 	SphereComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
 	GetRootComponent()->SetVisibility(true, true);
+}
+
+void ALMAHealthPickup::SinMovement()
+{
+	InitialLocation.Z += FMath::Sin(Frequency * GetWorld()->GetTimeSeconds()) * Amplitude;
+	this->SetActorLocation(InitialLocation);
+}
+
+FVector ALMAHealthPickup::GetInitialLocation()
+{
+	return InitialLocation;
+}
+
+void ALMAHealthPickup::SetInitialLocation(FVector location)
+{
+	InitialLocation = location;
 }
