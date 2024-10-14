@@ -1,5 +1,7 @@
 # Домашнее задание к занятию «Компоненты персонажа»
 
+# <span style="color:blue">*RED* [ВЫПОЛНЕННОЕ ЗАДАНИЕ](../05/LeaveMeAlone/)</span>.
+
 ### Цель задания
 
 1. Расширить Animation Blueprint.
