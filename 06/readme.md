@@ -1,6 +1,6 @@
 # Домашнее задание к занятию «Компоненты персонажа»
 
-# <span style="color:blue">*RED* [ВЫПОЛНЕННОЕ ЗАДАНИЕ](../05/LeaveMeAlone/)</span>.
+# <span style="color:blue"> [ВЫПОЛНЕННОЕ ЗАДАНИЕ](../05/LeaveMeAlone/)*RED*</span>.
 
 ### Цель задания
 
