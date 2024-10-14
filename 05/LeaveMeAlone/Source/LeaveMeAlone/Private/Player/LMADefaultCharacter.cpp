@@ -18,7 +18,6 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
 	SpringArmComponent->SetupAttachment(GetRootComponent());
 	SpringArmComponent->SetUsingAbsoluteRotation(true);
-	SpringArmComponent->TargetArmLength = ArmLength;
 	SpringArmComponent->SetRelativeRotation(FRotator(YRotation, 0.0f, 0.0f));
 	SpringArmComponent->bDoCollisionTest = false;
 	SpringArmComponent->bEnableCameraLag = true;
@@ -38,6 +37,8 @@ ALMADefaultCharacter::ALMADefaultCharacter()
 void ALMADefaultCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	SpringArmComponent->TargetArmLength = ArmLength;
 
 	if (CursorMaterial)
 	{
@@ -47,6 +48,8 @@ void ALMADefaultCharacter::BeginPlay()
 	OnHealthChanged(HealthComponent->GetHealth());
 	HealthComponent->OnDeath.AddUObject(this, &ALMADefaultCharacter::OnDeath);
 	HealthComponent->OnHealthChanged.AddUObject(this, &ALMADefaultCharacter::OnHealthChanged);
+
+	DefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
 
 void ALMADefaultCharacter::Tick(float DeltaTime)
@@ -56,6 +59,30 @@ void ALMADefaultCharacter::Tick(float DeltaTime)
 	{
 		RotationPlayerOnCursor();
 	}
+	
+	bool IsMoving = GetVelocity().Size() > 0.0f;
+	if (IsSprinting && IsMoving)
+	{
+		Stamina -= StaminaDrainRate * DeltaTime;
+		if (Stamina <= 0.0f)
+		{
+			Stamina = 0.0f;
+			StopSprinting();
+		}
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina));
+	}
+
+	if (Stamina < MaxStamina)
+	{
+		Stamina += StaminaRecoveryRate * DeltaTime;
+		if (Stamina > MaxStamina)
+		{
+			Stamina = MaxStamina;
+		}
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina));
+	}
+
+	CanSprint = Stamina > 0.0f;
 }
 
 void ALMADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -65,6 +92,9 @@ void ALMADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAxis("MoveForward", this, &ALMADefaultCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ALMADefaultCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Zoom", this, &ALMADefaultCharacter::Zoom);
+	
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ALMADefaultCharacter::StartSprinting);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ALMADefaultCharacter::StopSprinting);
 }
 
 void ALMADefaultCharacter::MoveForward(float Value)
@@ -117,5 +147,20 @@ void ALMADefaultCharacter::RotationPlayerOnCursor()
 
 void ALMADefaultCharacter::OnHealthChanged(float NewHealth)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::Printf(TEXT("Health = %f"), NewHealth));
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Health = %f"), NewHealth));
+}
+
+void ALMADefaultCharacter::StartSprinting()
+{
+	if (CanSprint && Stamina > 10.0f && GetVelocity().Size() > 0.0f)
+	{
+		IsSprinting = true;
+		GetCharacterMovement()->MaxWalkSpeed = DefaultWalkSpeed * SprintSpeedMultiplier;
+	}
+}
+
+void ALMADefaultCharacter::StopSprinting()
+{
+	IsSprinting = false;
+	GetCharacterMovement()->MaxWalkSpeed = DefaultWalkSpeed;
 }

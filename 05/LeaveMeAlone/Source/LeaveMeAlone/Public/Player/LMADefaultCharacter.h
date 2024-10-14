@@ -44,21 +44,36 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* DeathMontage;
+		
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
+	bool IsSprinting = false;	
 
 	virtual void BeginPlay() override;
 
 private:
 	float YRotation = -75.0f;
-	float ArmLength = 1400.0f;
+	float ArmLength = 2000.0f;
 	float FOV = 55.0f;
 	float MinArmLength = 500.0f;
 	float MaxArmLength = 3000.0f;
 	float ZoomSpeed = 100.0f;
+		
+	float DefaultWalkSpeed;
+	float SprintSpeedMultiplier = 2.0f; 
+	float Stamina = 100.0f;				
+	float MaxStamina = 100.0f;			
+	float StaminaDrainRate = 50.0f;		
+	float StaminaRecoveryRate = 25.0f;	
+	bool CanSprint = true;				
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void Zoom(float Value);
+	void StartSprinting();
+	void StopSprinting();
+
 	void OnDeath();
 	void RotationPlayerOnCursor();
+
 	void OnHealthChanged(float NewHealth);
 };
