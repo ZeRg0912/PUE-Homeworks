@@ -16,6 +16,11 @@ class LEAVEMEALONE_API ALMADefaultCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+public:
+	ALMADefaultCharacter();
+
+	UFUNCTION()
+	ULMAHealthComponent* GetHealthComponent() const { return HealthComponent; }  
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USpringArmComponent* SpringArmComponent;
@@ -41,11 +46,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	ALMADefaultCharacter();
-
-	UFUNCTION()
-	ULMAHealthComponent* GetHealthComponent() const { return HealthComponent; }
-
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
