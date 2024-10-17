@@ -81,7 +81,7 @@ bool ULMAWeaponComponent::CanReload() const
 
 void ULMAWeaponComponent::Reload()
 {
-      if(!CanReload()) return;
+    if(!CanReload()) return;
 	AnimReloading = true;
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	Character->PlayAnimMontage(ReloadMontage);

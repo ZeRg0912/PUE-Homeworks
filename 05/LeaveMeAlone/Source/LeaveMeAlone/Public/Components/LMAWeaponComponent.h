@@ -7,27 +7,43 @@
 #include "LMAWeaponComponent.generated.h"
 
 class ALMABaseWeapon;
+class UAnimMontage;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class LEAVEMEALONE_API ULMAWeaponComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-protected:
-	virtual void BeginPlay() override;
+public:
+	ULMAWeaponComponent();
 
+	void Fire();
+	void Reload();
+
+protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	TSubclassOf<ALMABaseWeapon> WeaponClass;
-	
-	UPROPERTY(EditDefaultsOnly)
-	FName SocketName = "hand_r_Weapon_socket";
 
-public:	
-	ULMAWeaponComponent();
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	UAnimMontage* ReloadMontage;
+
+	UPROPERTY(EditDefaultsOnly)
+	FName Socket = "hand_r_Weapon_socket";
+
+	virtual void BeginPlay() override;
+
+public:
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	UPROPERTY()
 	ALMABaseWeapon* Weapon = nullptr;
 
+	bool AnimReloading = false;
+
 	void SpawnWeapon();
+	void InitAnimNotify();
+
+	void OnNotifyReloadFinished(USkeletalMeshComponent* SkeletalMesh);
+	bool CanReload() const;
 };
