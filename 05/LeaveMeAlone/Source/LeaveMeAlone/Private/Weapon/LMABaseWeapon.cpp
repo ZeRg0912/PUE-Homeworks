@@ -45,6 +45,11 @@ void ALMABaseWeapon::Shoot()
 
 void ALMABaseWeapon::Fire()
 {
+	if (IsCurrentClipEmpty())
+	{
+		StopFire();
+		return;
+	}
 	Shoot();
 }
 
@@ -58,12 +63,32 @@ bool ALMABaseWeapon::IsCurrentClipEmpty() const
 	return CurrentAmmoWeapon.Bullets == 0;
 }
 
+bool ALMABaseWeapon::IsClipFull() const
+{
+	return CurrentAmmoWeapon.Bullets == AmmoWeapon.Bullets;
+}
+
 void ALMABaseWeapon::DecrementBullets()
 {
 	CurrentAmmoWeapon.Bullets--;
 	UE_LOG(LogWeapon, Display, TEXT("Bullets = %s"), *FString::FromInt(CurrentAmmoWeapon.Bullets));
 	if (IsCurrentClipEmpty())
 	{
+		OnAmmoEmpty.Broadcast();
+		StopFire();
 		ChangeClip();
 	}
+}
+
+void ALMABaseWeapon::StartFire()
+{
+	if (!IsCurrentClipEmpty() && !GetWorld()->GetTimerManager().IsTimerActive(FireTimerHandle))
+	{
+		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &ALMABaseWeapon::Fire, 0.1f, true);
+	}
+}
+
+void ALMABaseWeapon::StopFire()
+{
+	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
 }

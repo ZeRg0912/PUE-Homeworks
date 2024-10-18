@@ -18,7 +18,13 @@ public:
 	ULMAWeaponComponent();
 
 	void Fire();
+	void StartFire();
+	void StopFire();
 	void Reload();
+
+	UFUNCTION()
+	void OnAmmoEmpty();
+
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
@@ -46,4 +52,6 @@ private:
 
 	void OnNotifyReloadFinished(USkeletalMeshComponent* SkeletalMesh);
 	bool CanReload() const;
+
+	bool IsFiring = false;
 };

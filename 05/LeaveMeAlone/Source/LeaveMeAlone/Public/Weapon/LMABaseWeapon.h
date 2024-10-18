@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "LMABaseWeapon.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAmmoEmpty);
+
 class USkeletalMeshComponent;
 
 USTRUCT(BlueprintType)
@@ -26,12 +28,17 @@ class LEAVEMEALONE_API ALMABaseWeapon : public AActor
 	GENERATED_BODY()
 	
 public:	
+	FOnAmmoEmpty OnAmmoEmpty;
+
 	ALMABaseWeapon();
 
 	virtual void Tick(float DeltaTime) override;
 
 	void Fire();
+	void StartFire();
+	void StopFire();
 	void ChangeClip();
+	bool IsClipFull() const;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")
@@ -52,4 +59,5 @@ protected:
 
 private:
 	FAmmoWeapon CurrentAmmoWeapon;
+	FTimerHandle FireTimerHandle;
 };
