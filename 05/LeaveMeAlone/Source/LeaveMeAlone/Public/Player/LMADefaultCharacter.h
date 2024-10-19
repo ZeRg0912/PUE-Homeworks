@@ -24,6 +24,9 @@ public:
 	UFUNCTION()
 	ULMAHealthComponent* GetHealthComponent() const { return HealthComponent; } 
 
+	UFUNCTION(BlueprintCallable)
+	float GetStamina() const { return Stamina; };
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USpringArmComponent* SpringArmComponent;
@@ -67,12 +70,14 @@ private:
 	float Stamina = 100.0f;				
 	float MaxStamina = 100.0f;			
 	float StaminaDrainRate = 50.0f;		
-	float StaminaRecoveryRate = 25.0f;	
+	float StaminaRecoveryRate = 10.0f;	
 	bool CanSprint = true;				
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void Zoom(float Value);
+
+	void StaminaManager();
 	void StartSprinting();
 	void StopSprinting();
 

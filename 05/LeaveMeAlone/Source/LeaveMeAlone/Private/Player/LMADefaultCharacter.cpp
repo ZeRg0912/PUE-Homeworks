@@ -48,9 +48,9 @@ void ALMADefaultCharacter::BeginPlay()
 		CurrentCursor = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), CursorMaterial, CursorSize, FVector(0));
 	}
 
-	OnHealthChanged(HealthComponent->GetHealth());
+	//OnHealthChanged(HealthComponent->GetHealth());
 	HealthComponent->OnDeath.AddUObject(this, &ALMADefaultCharacter::OnDeath);
-	HealthComponent->OnHealthChanged.AddUObject(this, &ALMADefaultCharacter::OnHealthChanged);
+	//HealthComponent->OnHealthChanged.AddUObject(this, &ALMADefaultCharacter::OnHealthChanged);
 
 	DefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
@@ -63,29 +63,7 @@ void ALMADefaultCharacter::Tick(float DeltaTime)
 		RotationPlayerOnCursor();
 	}
 	
-	bool IsMoving = GetVelocity().Size() > 0.0f;
-	if (IsSprinting && IsMoving)
-	{
-		Stamina -= StaminaDrainRate * DeltaTime;
-		if (Stamina <= 0.0f)
-		{
-			Stamina = 0.0f;
-			StopSprinting();
-		}
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina));
-	}
-
-	if (Stamina < MaxStamina)
-	{
-		Stamina += StaminaRecoveryRate * DeltaTime;
-		if (Stamina > MaxStamina)
-		{
-			Stamina = MaxStamina;
-		}
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina));
-	}
-
-	CanSprint = Stamina > 0.0f;
+	StaminaManager();
 }
 
 void ALMADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -156,6 +134,33 @@ void ALMADefaultCharacter::RotationPlayerOnCursor()
 void ALMADefaultCharacter::OnHealthChanged(float NewHealth)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Health = %f"), NewHealth));
+}
+
+void ALMADefaultCharacter::StaminaManager()
+{
+	bool IsMoving = GetVelocity().Size() > 0.0f;
+	if (IsSprinting && IsMoving)
+	{
+		Stamina -= StaminaDrainRate * GetWorld()->GetDeltaSeconds();
+		if (Stamina <= 0.0f)
+		{
+			Stamina = 0.0f;
+			StopSprinting();
+		}
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina));
+	}
+
+	if (Stamina < MaxStamina)
+	{
+		Stamina += StaminaRecoveryRate * GetWorld()->GetDeltaSeconds();
+		if (Stamina > MaxStamina)
+		{
+			Stamina = MaxStamina;
+		}
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina));
+	}
+
+	CanSprint = Stamina > 0.0f;
 }
 
 void ALMADefaultCharacter::StartSprinting()

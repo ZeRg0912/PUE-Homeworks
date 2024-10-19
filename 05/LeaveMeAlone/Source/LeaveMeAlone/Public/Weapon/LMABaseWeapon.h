@@ -28,9 +28,11 @@ class LEAVEMEALONE_API ALMABaseWeapon : public AActor
 	GENERATED_BODY()
 	
 public:	
-	FOnAmmoEmpty OnAmmoEmpty;
 
 	ALMABaseWeapon();
+
+	FOnAmmoEmpty OnAmmoEmpty;
+	FAmmoWeapon GetCurrentAmmoWeapon() const { return CurrentAmmoWeapon; }
 
 	virtual void Tick(float DeltaTime) override;
 

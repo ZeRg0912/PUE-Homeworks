@@ -18,7 +18,9 @@ public:
 	ULMAWeaponComponent();
 
 	void Fire();
+	UFUNCTION(BlueprintCallable)
 	void StartFire();
+	UFUNCTION(BlueprintCallable)
 	void StopFire();
 	void Reload();
 
@@ -40,6 +42,9 @@ protected:
 
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION(BlueprintCallable)
+	bool GetCurrentWeaponAmmo(FAmmoWeapon& AmmoWeapon) const;
 
 private:
 	UPROPERTY()
