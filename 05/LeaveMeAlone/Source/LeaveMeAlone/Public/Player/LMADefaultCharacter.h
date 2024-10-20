@@ -27,6 +27,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetStamina() const { return Stamina; };
 
+	UFUNCTION(BlueprintCallable)
+	float GetSprinting() const { return IsSprinting; };
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	USpringArmComponent* SpringArmComponent;

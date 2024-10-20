@@ -61,9 +61,8 @@ void ALMADefaultCharacter::Tick(float DeltaTime)
 	if (!(HealthComponent->IsDead()))
 	{
 		RotationPlayerOnCursor();
-	}
-	
-	StaminaManager();
+		StaminaManager();
+	}	
 }
 
 void ALMADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -147,7 +146,7 @@ void ALMADefaultCharacter::StaminaManager()
 			Stamina = 0.0f;
 			StopSprinting();
 		}
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina));
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina));
 	}
 
 	if (Stamina < MaxStamina)
@@ -157,7 +156,7 @@ void ALMADefaultCharacter::StaminaManager()
 		{
 			Stamina = MaxStamina;
 		}
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina));
+		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina));
 	}
 
 	CanSprint = Stamina > 0.0f;
@@ -168,6 +167,7 @@ void ALMADefaultCharacter::StartSprinting()
 	if (CanSprint && Stamina > 10.0f && GetVelocity().Size() > 0.0f)
 	{
 		IsSprinting = true;
+		WeaponComponent->StopFire();
 		GetCharacterMovement()->MaxWalkSpeed = DefaultWalkSpeed * SprintSpeedMultiplier;
 	}
 }

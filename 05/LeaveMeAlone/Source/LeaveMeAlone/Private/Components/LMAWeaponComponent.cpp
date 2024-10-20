@@ -1,9 +1,12 @@
 // LeaveMeAlone Game by Netologiya. All Rights Reserved.
 
+#include "Player/LMADefaultCharacter.h"
 #include "Components/LMAWeaponComponent.h"
 #include "Animations/LMAReloadFinishedAnimNotify.h"
 #include "GameFramework/Character.h"
 #include "Weapon/LMABaseWeapon.h"
+
+class ALMADefaultCharacter;
 
 ULMAWeaponComponent::ULMAWeaponComponent()
 {
@@ -97,7 +100,8 @@ void ULMAWeaponComponent::Reload()
 
 void ULMAWeaponComponent::StartFire()
 {
-	if (Weapon && !AnimReloading)
+	const auto Character = Cast<ALMADefaultCharacter>(GetOwner());
+	if (Character && !Character->GetSprinting() && Weapon && !AnimReloading)
 	{
 		IsFiring = true;
 		Weapon->StartFire();
