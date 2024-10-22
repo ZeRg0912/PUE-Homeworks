@@ -1,7 +1,7 @@
 // LeaveMeAlone Game by Netologiya. All Rights Reserved.
 
-#include "Player/LMADefaultCharacter.h"
 #include "Components/LMAWeaponComponent.h"
+#include "Player/LMADefaultCharacter.h"
 #include "Animations/LMAReloadFinishedAnimNotify.h"
 #include "GameFramework/Character.h"
 #include "Weapon/LMABaseWeapon.h"

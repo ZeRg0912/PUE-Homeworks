@@ -84,6 +84,7 @@ private:
 	void StartSprinting();
 	void StopSprinting();
 
+	UFUNCTION()
 	void OnDeath();
 	void RotationPlayerOnCursor();
 

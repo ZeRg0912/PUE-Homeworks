@@ -48,9 +48,11 @@ void ALMADefaultCharacter::BeginPlay()
 		CurrentCursor = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), CursorMaterial, CursorSize, FVector(0));
 	}
 
-	//OnHealthChanged(HealthComponent->GetHealth());
-	HealthComponent->OnDeath.AddUObject(this, &ALMADefaultCharacter::OnDeath);
-	//HealthComponent->OnHealthChanged.AddUObject(this, &ALMADefaultCharacter::OnHealthChanged);
+	 HealthComponent = FindComponentByClass<ULMAHealthComponent>();
+	if (HealthComponent)
+	{
+		HealthComponent->OnDeath.AddDynamic(this, &ALMADefaultCharacter::OnDeath);
+	}
 
 	DefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
@@ -146,7 +148,6 @@ void ALMADefaultCharacter::StaminaManager()
 			Stamina = 0.0f;
 			StopSprinting();
 		}
-		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina));
 	}
 
 	if (Stamina < MaxStamina)
@@ -156,7 +157,6 @@ void ALMADefaultCharacter::StaminaManager()
 		{
 			Stamina = MaxStamina;
 		}
-		//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Stamina: %f"), Stamina));
 	}
 
 	CanSprint = Stamina > 0.0f;
