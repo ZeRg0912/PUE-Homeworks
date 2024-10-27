@@ -9,6 +9,8 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAmmoEmpty);
 
 class USkeletalMeshComponent;
+class USoundWave;
+class UNiagaraSystem;
 
 USTRUCT(BlueprintType)
 struct FAmmoWeapon
@@ -30,6 +32,14 @@ class LEAVEMEALONE_API ALMABaseWeapon : public AActor
 public:	
 
 	ALMABaseWeapon();
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	USoundWave* ShootWave;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	UNiagaraSystem* TraceEffect;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	FString TraceName = "Tracer";
+	void SpawnTrace(const FVector& TraceStart, const FVector& TraceEnd);
 
 	FOnAmmoEmpty OnAmmoEmpty;
 	FAmmoWeapon GetCurrentAmmoWeapon() const { return CurrentAmmoWeapon; }
