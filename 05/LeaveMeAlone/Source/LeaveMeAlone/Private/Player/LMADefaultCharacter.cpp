@@ -42,17 +42,15 @@ void ALMADefaultCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	SpringArmComponent->TargetArmLength = ArmLength;
+	Stamina = MaxStamina;
 
 	if (CursorMaterial)
 	{
 		CurrentCursor = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), CursorMaterial, CursorSize, FVector(0));
 	}
 
-	 HealthComponent = FindComponentByClass<ULMAHealthComponent>();
-	if (HealthComponent)
-	{
-		HealthComponent->OnDeath.AddDynamic(this, &ALMADefaultCharacter::OnDeath);
-	}
+	HealthComponent->OnDeath.AddDynamic(this, &ALMADefaultCharacter::OnDeath);
+	HealthComponent->OnHealthChanged.AddDynamic(this, &ALMADefaultCharacter::OnHealthChanged);
 
 	DefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
@@ -103,7 +101,7 @@ void ALMADefaultCharacter::Zoom(float Value)
 	}
 }
 
-void ALMADefaultCharacter::OnDeath()
+void ALMADefaultCharacter::OnDeath_Implementation()
 {
 	CurrentCursor->DestroyRenderState_Concurrent();
 	PlayAnimMontage(DeathMontage);
@@ -114,7 +112,6 @@ void ALMADefaultCharacter::OnDeath()
 		Controller->ChangeState(NAME_Spectating);
 	}
 }
-
 
 void ALMADefaultCharacter::RotationPlayerOnCursor()
 {
@@ -132,11 +129,6 @@ void ALMADefaultCharacter::RotationPlayerOnCursor()
 	}
 }
 
-void ALMADefaultCharacter::OnHealthChanged(float NewHealth)
-{
-	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Health = %f"), NewHealth));
-}
-
 void ALMADefaultCharacter::StaminaManager()
 {
 	bool IsMoving = GetVelocity().Size() > 0.0f;
@@ -148,9 +140,7 @@ void ALMADefaultCharacter::StaminaManager()
 			Stamina = 0.0f;
 			StopSprinting();
 		}
-	}
-
-	if (Stamina < MaxStamina)
+	} else if (Stamina < MaxStamina)
 	{
 		Stamina += StaminaRecoveryRate * GetWorld()->GetDeltaSeconds();
 		if (Stamina > MaxStamina)
@@ -159,12 +149,12 @@ void ALMADefaultCharacter::StaminaManager()
 		}
 	}
 
-	CanSprint = Stamina > 0.0f;
+	CanSprint = Stamina > 0.0f && GetVelocity().Size() > 0.0f;
 }
 
 void ALMADefaultCharacter::StartSprinting()
 {
-	if (CanSprint && Stamina > 10.0f && GetVelocity().Size() > 0.0f)
+	if (CanSprint && Stamina > ((int)MaxStamina % 10))
 	{
 		IsSprinting = true;
 		WeaponComponent->StopFire();

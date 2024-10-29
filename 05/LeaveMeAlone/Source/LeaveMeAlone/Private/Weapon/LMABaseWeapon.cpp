@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Engine/DamageEvents.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogWeapon, All, All);
 
@@ -44,12 +45,14 @@ void ALMABaseWeapon::Shoot()
 	const FVector TraceStart = SocketTransform.GetLocation();
 	const FVector ShootDirection = SocketTransform.GetRotation().GetForwardVector();
 	const FVector TraceEnd = TraceStart + ShootDirection * TraceDistance;
+
 	FHitResult HitResult;
 	GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECollisionChannel::ECC_Visibility);
 	FVector TracerEnd = TraceEnd;
 
 	if (HitResult.bBlockingHit)
 	{
+		MakeDamage(HitResult);
 		TracerEnd = HitResult.ImpactPoint;
 	}
 
@@ -106,4 +109,18 @@ void ALMABaseWeapon::StartFire()
 void ALMABaseWeapon::StopFire()
 {
 	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
+}
+
+void ALMABaseWeapon::MakeDamage(const FHitResult& HitResult)
+{
+	const auto Zombie = HitResult.GetActor();
+    if (!IsValid(Zombie)) return;
+
+    const auto Pawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+    if (!IsValid(Pawn)) return;
+
+    const auto Controller = Pawn->GetController<APlayerController>();
+    if (!IsValid(Controller)) return;
+
+    Zombie->TakeDamage(Damage, FDamageEvent(), Controller, this);
 }

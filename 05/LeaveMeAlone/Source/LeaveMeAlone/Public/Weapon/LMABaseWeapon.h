@@ -35,10 +35,16 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	USoundWave* ShootWave;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	UNiagaraSystem* TraceEffect;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	FString TraceName = "Tracer";
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	float Damage = 20.0f;
+
 	void SpawnTrace(const FVector& TraceStart, const FVector& TraceEnd);
 
 	FOnAmmoEmpty OnAmmoEmpty;
@@ -51,6 +57,8 @@ public:
 	void StopFire();
 	void ChangeClip();
 	bool IsClipFull() const;
+
+	void MakeDamage(const FHitResult& HitResult);
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Weapon")

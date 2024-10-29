@@ -7,6 +7,7 @@
 #include "LMAHealthComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float, NewHealth);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class LEAVEMEALONE_API ULMAHealthComponent : public UActorComponent
@@ -27,6 +28,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnDeath OnDeath;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthChanged OnHealthChanged;
 
 protected:
 	virtual void BeginPlay() override;
@@ -38,5 +42,5 @@ private:
 	float Health = 0.0f;
 
 	UFUNCTION()
-	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);	
+	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 };

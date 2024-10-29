@@ -4,12 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-
 #include "LMAEnemyCharacter.generated.h"
 
 class ULMAHealthComponent;
 class UBehaviorTree;
-
 
 UCLASS()
 class LEAVEMEALONE_API ALMAEnemyCharacter : public ACharacter
@@ -19,13 +17,17 @@ class LEAVEMEALONE_API ALMAEnemyCharacter : public ACharacter
 public:
 	ALMAEnemyCharacter();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	ULMAHealthComponent* HealthComponent;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
 	UBehaviorTree* BehaviorTreeAsset;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnHealthChanged(float NewHealth);
 
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Health")
+	ULMAHealthComponent* HealthComponent;
+
 	virtual void BeginPlay() override;
 };

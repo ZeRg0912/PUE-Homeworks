@@ -24,20 +24,26 @@ public:
 	UFUNCTION()
 	ULMAHealthComponent* GetHealthComponent() const { return HealthComponent; } 
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Character")
 	float GetStamina() const { return Stamina; };
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Character")
 	float GetSprinting() const { return IsSprinting; };
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "Character")
+	void OnHealthChanged(float NewHealth);
+
+	UFUNCTION(BlueprintNativeEvent, Category = "Character")
+	void OnDeath();
+
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Camera")
 	USpringArmComponent* SpringArmComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Camera")
 	UCameraComponent* CameraComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Weapon")
 	ULMAWeaponComponent* WeaponComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Health")
@@ -55,8 +61,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* DeathMontage;
 		
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Movement")
-	bool IsSprinting = false;	
+	UPROPERTY(EditDefaultsOnly, Category = "Components|Stamina")
+	float SprintSpeedMultiplier = 2.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Components|Stamina")
+	float MaxStamina = 100.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Components|Stamina")
+	float StaminaDrainRate = 50.0f;
+	UPROPERTY(EditDefaultsOnly, Category = "Components|Stamina")
+	float StaminaRecoveryRate = 10.0f;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Stamina")
+	bool IsSprinting = false;
 
 	virtual void BeginPlay() override;
 
@@ -69,11 +83,7 @@ private:
 	float ZoomSpeed = 100.0f;
 		
 	float DefaultWalkSpeed;
-	float SprintSpeedMultiplier = 2.0f; 
-	float Stamina = 100.0f;				
-	float MaxStamina = 100.0f;			
-	float StaminaDrainRate = 50.0f;		
-	float StaminaRecoveryRate = 10.0f;	
+	float Stamina = 0.0f;	
 	bool CanSprint = true;				
 
 	void MoveForward(float Value);
@@ -84,9 +94,5 @@ private:
 	void StartSprinting();
 	void StopSprinting();
 
-	UFUNCTION()
-	void OnDeath();
 	void RotationPlayerOnCursor();
-
-	void OnHealthChanged(float NewHealth);
 };
