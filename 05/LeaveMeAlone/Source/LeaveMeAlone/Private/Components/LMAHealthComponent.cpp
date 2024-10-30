@@ -17,13 +17,14 @@ void ULMAHealthComponent::BeginPlay()
 	{
 		OwnerComponent->OnTakeAnyDamage.AddDynamic(this, &ULMAHealthComponent::OnTakeAnyDamage);
 	}
+	OnHealthChanged.Broadcast(Health);
 } 
 
 void ULMAHealthComponent::OnTakeAnyDamage(
 	AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser)
 {
-	if (IsDead())
-		return;
+	if (IsDead()) return;
+	OnHealthChanged.Broadcast(Health);
 	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
 	if (IsDead())
 	{
@@ -43,8 +44,7 @@ bool ULMAHealthComponent::IsHealthFull() const
 
 bool ULMAHealthComponent::AddHealth(float NewHealth)
 {
-	if (IsDead() || IsHealthFull())
-		return false;
+	if (IsDead() || IsHealthFull()) return false;
 
 	Health = FMath::Clamp(Health + NewHealth, 0.0f, MaxHealth);
 	return true;

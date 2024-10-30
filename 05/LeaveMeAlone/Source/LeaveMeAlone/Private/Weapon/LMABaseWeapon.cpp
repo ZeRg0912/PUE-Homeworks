@@ -89,7 +89,6 @@ bool ALMABaseWeapon::IsClipFull() const
 void ALMABaseWeapon::DecrementBullets()
 {
 	CurrentAmmoWeapon.Bullets--;
-	UE_LOG(LogWeapon, Display, TEXT("Bullets = %s"), *FString::FromInt(CurrentAmmoWeapon.Bullets));
 	if (IsCurrentClipEmpty())
 	{
 		OnAmmoEmpty.Broadcast();
@@ -114,13 +113,13 @@ void ALMABaseWeapon::StopFire()
 void ALMABaseWeapon::MakeDamage(const FHitResult& HitResult)
 {
 	const auto Zombie = HitResult.GetActor();
-    if (!IsValid(Zombie)) return;
+    if (!Zombie) return;
 
     const auto Pawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-    if (!IsValid(Pawn)) return;
+    if (!Pawn) return;
 
     const auto Controller = Pawn->GetController<APlayerController>();
-    if (!IsValid(Controller)) return;
+    if (!Controller) return;
 
     Zombie->TakeDamage(Damage, FDamageEvent(), Controller, this);
 }
