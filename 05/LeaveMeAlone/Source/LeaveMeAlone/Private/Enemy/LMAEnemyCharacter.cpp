@@ -3,6 +3,7 @@
 
 #include "Enemy/LMAEnemyCharacter.h"
 #include "Components/LMAHealthComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 ALMAEnemyCharacter::ALMAEnemyCharacter()
@@ -13,11 +14,19 @@ ALMAEnemyCharacter::ALMAEnemyCharacter()
 
 void ALMAEnemyCharacter::BeginPlay()
 {
-	Super::BeginPlay();		
+	Super::BeginPlay();
+
+	HealthComponent->OnDeath.AddDynamic(this, &ALMAEnemyCharacter::OnDeath);
 	HealthComponent->OnHealthChanged.AddDynamic(this, &ALMAEnemyCharacter::OnHealthChanged);
 }
 
 void ALMAEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void ALMAEnemyCharacter::OnDeath_Implementation()
+{
+	GetCharacterMovement()->DisableMovement();
+	PlayAnimMontage(DeathMontage);	
 }

@@ -23,11 +23,17 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnHealthChanged(float NewHealth);
 
+	UFUNCTION(BlueprintNativeEvent, Category = "Character")
+	void OnDeath();
+
 	virtual void Tick(float DeltaTime) override;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components|Health")
 	ULMAHealthComponent* HealthComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* DeathMontage;
 
 	virtual void BeginPlay() override;
 };
