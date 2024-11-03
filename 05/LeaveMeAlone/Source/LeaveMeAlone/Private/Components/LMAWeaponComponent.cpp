@@ -13,14 +13,6 @@ ULMAWeaponComponent::ULMAWeaponComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-void ULMAWeaponComponent::Fire()
-{
-	if (Weapon && !AnimReloading)
-	{
-		Weapon->Fire();
-	}
-}
-
 void ULMAWeaponComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -105,6 +97,15 @@ void ULMAWeaponComponent::StartFire()
 	{
 		IsFiring = true;
 		Weapon->StartFire();
+	}
+}
+
+void ULMAWeaponComponent::Fire()
+{
+	const auto Character = Cast<ALMADefaultCharacter>(GetOwner());
+	if (Weapon && !AnimReloading && !Character->GetSprinting())
+	{
+		Weapon->Fire();
 	}
 }
 
