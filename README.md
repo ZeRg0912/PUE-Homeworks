@@ -36,6 +36,14 @@ LeaveMeAlone — учебный проект, представляющий со�
 
 Этот документ можно использовать как руководство при разработке и доработке проекта.
 
+# ---LICENSES---
+# In project used:
+## 1. FPS Weapon Bundle by Deadghost Interactive
+## 2. Metro Maintenance Station Pack by Nimikko
+## 3. Millitary Airport (Military Base, Millitary Props) by FreshCan
+## 4. ZombiePack (Animations) by Netology
+## 5. Sounds by Netology
+
 
 # Домашние задания по курсу «Разработка видеоигр на Unreal Engine 5», профессия «Разработчик на С++»
 
