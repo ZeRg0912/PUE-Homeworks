@@ -43,6 +43,8 @@ LeaveMeAlone — учебный проект, представляющий со�
 ## 3. Millitary Airport (Military Base, Millitary Props) by FreshCan
 ## 4. ZombiePack (Animations) by Netology
 ## 5. Sounds by Netology
+## 6. Book Head Monster by h3llowner
+## 7. Survival Character by Arberry
 
 
 # Домашние задания по курсу «Разработка видеоигр на Unreal Engine 5», профессия «Разработчик на С++»
