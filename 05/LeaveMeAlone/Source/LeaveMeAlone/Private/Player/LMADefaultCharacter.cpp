@@ -83,39 +83,6 @@ void ALMADefaultCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, WeaponComponent, &ULMAWeaponComponent::Reload);
 }
 
-void ALMADefaultCharacter::MoveForward(float Value)
-{
-	AddMovementInput(GetActorForwardVector(), Value);
-	//AddMovementInput(CameraComponent->GetUpVector(), Value);
-}
-
-void ALMADefaultCharacter::MoveRight(float Value)
-{
-	AddMovementInput(GetActorRightVector(), Value);
-	//AddMovementInput(CameraComponent->GetRightVector(), Value);	
-} 
-
-void ALMADefaultCharacter::Zoom(float Value)
-{
-	if (Value != 0.0f)
-	{
-		ArmLength = FMath::Clamp((ArmLength + (Value * ZoomSpeed)), MinArmLength, MaxArmLength);
-		SpringArmComponent->TargetArmLength = ArmLength;
-	}
-}
-
-void ALMADefaultCharacter::OnDeath_Implementation()
-{
-	CurrentCursor->DestroyRenderState_Concurrent();
-	PlayAnimMontage(DeathMontage);
-	GetCharacterMovement()->DisableMovement();
-	SetLifeSpan(5.0f);
-	if (Controller)
-	{
-		Controller->ChangeState(NAME_Spectating);
-	}
-}
-
 void ALMADefaultCharacter::RotationPlayerOnCursor()
 {
 	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
@@ -132,6 +99,18 @@ void ALMADefaultCharacter::RotationPlayerOnCursor()
 	}
 }
 
+void ALMADefaultCharacter::MoveForward(float Value)
+{
+	AddMovementInput(GetActorForwardVector(), Value);
+	//AddMovementInput(CameraComponent->GetUpVector(), Value);
+}
+
+void ALMADefaultCharacter::MoveRight(float Value)
+{
+	AddMovementInput(GetActorRightVector(), Value);
+	//AddMovementInput(CameraComponent->GetRightVector(), Value);	
+} 
+
 void ALMADefaultCharacter::StaminaManager()
 {
 	bool IsMoving = GetVelocity().Size() > 0.0f;
@@ -143,7 +122,8 @@ void ALMADefaultCharacter::StaminaManager()
 			Stamina = 0.0f;
 			StopSprinting();
 		}
-	} else if (Stamina < MaxStamina)
+	}
+	else if (Stamina < MaxStamina)
 	{
 		Stamina += StaminaRecoveryRate * GetWorld()->GetDeltaSeconds();
 		if (Stamina > MaxStamina)
@@ -169,4 +149,25 @@ void ALMADefaultCharacter::StopSprinting()
 {
 	IsSprinting = false;
 	GetCharacterMovement()->MaxWalkSpeed = DefaultWalkSpeed;
+}
+
+void ALMADefaultCharacter::Zoom(float Value)
+{
+	if (Value != 0.0f)
+	{
+		ArmLength = FMath::Clamp((ArmLength + (Value * ZoomSpeed)), MinArmLength, MaxArmLength);
+		SpringArmComponent->TargetArmLength = ArmLength;
+	}
+}
+
+void ALMADefaultCharacter::OnDeath_Implementation()
+{
+	CurrentCursor->DestroyRenderState_Concurrent();
+	PlayAnimMontage(DeathMontage);
+	GetCharacterMovement()->DisableMovement();
+	SetLifeSpan(5.0f);
+	if (Controller)
+	{
+		Controller->ChangeState(NAME_Spectating);
+	}
 }
