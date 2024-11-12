@@ -44,7 +44,9 @@ LeaveMeAlone — учебный проект, представляющий со�
 ## 4. ZombiePack (Animations) by Netology
 ## 5. Sounds by Netology
 ## 6. Book Head Monster by h3llowner
-## 7. Survival Character by Arberry
+## 7. Free Nomad by Paul N
+## 8. Gryla by YuriOnyx
+## 9. Horror Props by Bugrimov Maksim
 
 
 # Домашние задания по курсу «Разработка видеоигр на Unreal Engine 5», профессия «Разработчик на С++»
