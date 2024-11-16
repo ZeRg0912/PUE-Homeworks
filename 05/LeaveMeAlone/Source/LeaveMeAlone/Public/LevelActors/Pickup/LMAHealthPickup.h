@@ -36,10 +36,10 @@ protected:
 	float HealthFromPickup = 100.0f;
 
 	UPROPERTY(EditInstanceOnly)
-	float Frequency = 2.0;
+	float Frequency = 1.0;
 
 	UPROPERTY(EditInstanceOnly)
-	float Amplitude = 35.0;
+	float Amplitude = 0.5;
 
 	UPROPERTY(VisibleAnywhere)
 	FVector InitialLocation;

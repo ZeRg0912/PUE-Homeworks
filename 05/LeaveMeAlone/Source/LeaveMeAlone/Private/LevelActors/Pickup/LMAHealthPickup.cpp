@@ -30,9 +30,12 @@ void ALMAHealthPickup::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 	const auto Charcter = Cast<ALMADefaultCharacter>(OtherActor);
-	if (GivePickup(Charcter))
+	if (Charcter)
 	{
-		PickupWasTaken();
+		if (GivePickup(Charcter))
+		{
+			PickupWasTaken();
+		}
 	}
 }
 
@@ -49,9 +52,10 @@ void ALMAHealthPickup::PickupWasTaken()
 {
 	SphereComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	GetRootComponent()->SetVisibility(false, true);
+	Destroy();
 
-	FTimerHandle RespawnTimerHandle;
-	GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ALMAHealthPickup::RespawnPickup, RespawnTime);
+	//FTimerHandle RespawnTimerHandle;
+	//GetWorldTimerManager().SetTimer(RespawnTimerHandle, this, &ALMAHealthPickup::RespawnPickup, RespawnTime);
 }
 
 void ALMAHealthPickup::RespawnPickup()
